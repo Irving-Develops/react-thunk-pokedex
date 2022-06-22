@@ -27,9 +27,22 @@ const remove = (itemId, pokemonId) => ({
 
 const initialState = {};
 
+export const getPokeItems = (id) => async dispatch => {
+  console.log(`POKEMON ID: ${id}`);
+  const response = await fetch(`/api/pokemon/${id}/items`,)
+  if (response.ok) {
+    const items = await response.json()
+    console.log(`ITEMS: ${items}`);
+    dispatch(load(items, id))
+  }
+}
+
+
+
+
 const itemsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case LOAD_ITEMS: 
+    case LOAD_ITEMS:
       const newItems = {};
       action.items.forEach(item => {
         newItems[item.id] = item;
@@ -38,12 +51,12 @@ const itemsReducer = (state = initialState, action) => {
         ...state,
         ...newItems
       }
-    case REMOVE_ITEM: 
+    case REMOVE_ITEM:
       const newState = { ...state };
       delete newState[action.itemId];
       return newState;
     case ADD_ITEM:
-    case UPDATE_ITEM: 
+    case UPDATE_ITEM:
       return {
         ...state,
         [action.item.id]: action.item
