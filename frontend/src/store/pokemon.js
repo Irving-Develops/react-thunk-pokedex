@@ -19,6 +19,24 @@ const addOnePokemon = pokemon => ({
   pokemon
 });
 
+export function createPokemon(pokemon) {
+  return async function (dispatch){
+    console.log(pokemon, "from thunk")
+    const response = await fetch('/api/pokemon', {
+      method: 'POST',
+      headers: {"Content-Type": 'application/json'},
+      body: JSON.stringify(pokemon)
+    })
+
+    if(response.ok){
+      const pokemon = await response.json();
+      await dispatch(addOnePokemon(pokemon))
+      return pokemon
+    }
+
+  }
+}
+
 export const getPokemon = () => async dispatch => {
   const response = await fetch(`/api/pokemon`);
 
