@@ -37,6 +37,20 @@ export const getPokeItems = (id) => async dispatch => {
   }
 }
 
+export const updatePokeItem = (item) => async dispatch => {
+  const response = await fetch(`/api/items/${item.id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(item)
+  })
+
+    if (response.ok) {
+      const updatedItem = await response.json();
+      await dispatch(update(updatedItem))
+      return updatedItem;
+    }
+}
+
 
 
 
